@@ -39,7 +39,7 @@ public static class ServiceCollectionExtensions
             return channel.CreateChannel();
         });
 
-        services.AddScoped<ICalculatorService, CalculatorProxy>();
+        services.AddScoped<ICalculatorProxy, CalculatorProxy>();
 
         return services;
     }
