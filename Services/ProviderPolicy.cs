@@ -54,4 +54,16 @@ public static class ProviderPolicy
                 onBreak: (_, state, breakingTime, _) => Console.WriteLine($"Circuit breaking! State: {state}. Break time: {breakingTime.TotalSeconds}s"),
                 onReset: _ => Console.WriteLine("Circuit resetting!"),
                 onHalfOpen: () => Console.WriteLine($"Circuit transitioning to {CircuitState.HalfOpen}"));
+
+    public static IAsyncPolicy GetAdvancedCircuitBreakerPolicyAsync(int circuitBreaking, TimeSpan durationOfBreak)
+        => Policy
+            .Handle<Exception>()
+            .AdvancedCircuitBreakerAsync(
+                failureThreshold: 0.6,
+                samplingDuration: TimeSpan.FromSeconds(5),
+                minimumThroughput: 5,
+                durationOfBreak: durationOfBreak,
+                onBreak: (_, state, breakingTime, _) => Console.WriteLine($"Circuit breaking! State: {state}. Break time: {breakingTime.TotalSeconds}s"),
+                onReset: _ => Console.WriteLine($"Circuit resetting!"),
+                onHalfOpen: () => Console.WriteLine($"Circuit transitioning to {CircuitState.HalfOpen}"));
 }

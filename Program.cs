@@ -23,10 +23,24 @@ while (true)
 
     if (key == "0")
     {
-        Console.WriteLine("WCF Proxy result: " + await wcfProxy.AddAsync(2, 2));
+        for (int i = 0; i < 3; i++)
+        {
+            Console.WriteLine($"Rodada {i + 1}");
+            Console.WriteLine("WCF Proxy result: " + string.Join(',', await Task.WhenAll(CreateThreads(wcfProxy, 6))));
+            Thread.Sleep(TimeSpan.FromSeconds(3));
+        }
     }
     else
         break;
+}
+
+List<Task<int>> CreateThreads(ICalculatorProxy proxy, int numberOfThreads)
+{
+    List<Task<int>> threads = new();
+    for (int i = 0; i < numberOfThreads; i++)
+        threads.Add(proxy.AddAsync(2, 2));
+
+    return threads;
 }
 
 Console.WriteLine("End Application");
