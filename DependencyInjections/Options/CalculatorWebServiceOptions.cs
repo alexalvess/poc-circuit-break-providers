@@ -18,4 +18,7 @@ public record CalculatorWebServiceOptions
 
     [Required]
     public RetryPolicyOptions RetryPolicyOptions { get; set; }
+
+    [Required]
+    public CircuitBreakerOptions CircuitBreakerOptions { get; set; }
 }

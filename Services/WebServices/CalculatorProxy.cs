@@ -14,15 +14,8 @@ public class CalculatorProxy : ICalculatorProxy
 	public CalculatorProxy(ICalculatorService service, IOptionsMonitor<CalculatorWebServiceOptions> options)
 	{
 		_policyWrap = Policy.WrapAsync(
-            ProviderPolicy.GetRetryPolicyAsync(
-                retryCount: options.CurrentValue.RetryCount, 
-                sleepDurationPower: options.CurrentValue.SleepDurationPower, 
-                eachRetryTimeout: options.CurrentValue.EachRetryTimeout),
-            ProviderPolicy.GetAdvancedCircuitBreakerPolicyAsync(
-                failurePercentage: options.CurrentValue.FailurePercentage,
-                samplingDuration: options.CurrentValue.SamplingDuration,
-                minumumSampling: options.CurrentValue.MinumumSampling,
-                durationOfBreak: options.CurrentValue.DurationOfBreak));
+            ProviderPolicy.GetRetryPolicyAsync(options.CurrentValue.RetryPolicyOptions),
+            ProviderPolicy.GetAdvancedCircuitBreakerPolicyAsync(options.CurrentValue.CircuitBreakerOptions));
 
 		_service = service;
 	}

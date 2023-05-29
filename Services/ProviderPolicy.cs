@@ -36,38 +36,34 @@ public static class ProviderPolicy
                     timeoutStrategy: TimeoutStrategy.Optimistic,
                     onTimeoutAsync: async (_, timeout, _) => { await Task.Yield(); LogError($"Timeout applied after {timeout}s"); }));
 
-    public static ISyncPolicy GetCircuitBreakerPolicy(int circuitBreaking, TimeSpan durationOfBreak)
+    public static ISyncPolicy GetCircuitBreakerPolicy(CircuitBreakerOptions options)
         => Policy
             .Handle<Exception>()
             .CircuitBreaker(
-                exceptionsAllowedBeforeBreaking: circuitBreaking,
-                durationOfBreak: durationOfBreak,
+                exceptionsAllowedBeforeBreaking: options.CircuitBreaking,
+                durationOfBreak: options.DurationOfBreak,
                 onBreak: (_, state, breakingTime, _) => LogWarning($"Circuit breaking! State: {state}. Break time: {breakingTime.TotalSeconds}s"),
                 onReset: _ => LogWarning("Circuit resetting!"),
                 onHalfOpen: () => LogWarning($"Circuit transitioning to {CircuitState.HalfOpen}"));
 
-    public static IAsyncPolicy GetCircuitBreakerPolicyAsync(int circuitBreaking, TimeSpan durationOfBreak)
+    public static IAsyncPolicy GetCircuitBreakerPolicyAsync(CircuitBreakerOptions options)
         => Policy
             .Handle<Exception>()
             .CircuitBreakerAsync(
-                exceptionsAllowedBeforeBreaking: circuitBreaking,
-                durationOfBreak: durationOfBreak,
+                exceptionsAllowedBeforeBreaking: options.CircuitBreaking,
+                durationOfBreak: options.DurationOfBreak,
                 onBreak: (_, state, breakingTime, _) => LogWarning($"Circuit breaking! State: {state}. Break time: {breakingTime.TotalSeconds}s"),
                 onReset: _ => LogWarning("Circuit resetting!"),
                 onHalfOpen: () => LogWarning($"Circuit transitioning to {CircuitState.HalfOpen}"));
 
-    public static IAsyncPolicy GetAdvancedCircuitBreakerPolicyAsync(
-        double failurePercentage, 
-        TimeSpan samplingDuration, 
-        int minumumSampling,
-        TimeSpan durationOfBreak)
+    public static IAsyncPolicy GetAdvancedCircuitBreakerPolicyAsync(CircuitBreakerOptions options)
         => Policy
             .Handle<Exception>()
             .AdvancedCircuitBreakerAsync(
-                failureThreshold: failurePercentage,
-                samplingDuration: samplingDuration,
-                minimumThroughput: minumumSampling,
-                durationOfBreak: durationOfBreak,
+                failureThreshold: options.AdvancedCircuitBreakerOptions.FailurePercentage,
+                samplingDuration: options.AdvancedCircuitBreakerOptions.SamplingDuration,
+                minimumThroughput: options.AdvancedCircuitBreakerOptions.MinumumSampling,
+                durationOfBreak: options.DurationOfBreak,
                 onBreak: (_, state, breakingTime, _) => LogWarning($"Circuit breaking! State: {state}. Break time: {breakingTime.TotalSeconds}s"),
                 onReset: _ => LogWarning($"Circuit resetting!"),
                 onHalfOpen: () => LogWarning($"Circuit transitioning to {CircuitState.HalfOpen}"));
@@ -75,14 +71,14 @@ public static class ProviderPolicy
     private static void LogError(string message)
     {
         Console.BackgroundColor = ConsoleColor.Red;
-        Console.WriteLine(message.Length > 100 ? message.Substring(0, 100) : message);
+        Console.WriteLine(message.Length > 100 ? message[..100] : message);
         Console.ResetColor();
     }
 
     private static void LogWarning(string message)
     {
         Console.BackgroundColor = ConsoleColor.DarkYellow;
-        Console.WriteLine(message.Length > 100 ? message.Substring(0, 100) : message);
+        Console.WriteLine(message.Length > 100 ? message[..100] : message);
         Console.ResetColor();
     }
 }
