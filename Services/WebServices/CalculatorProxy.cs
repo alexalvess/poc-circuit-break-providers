@@ -19,7 +19,9 @@ public class CalculatorProxy : ICalculatorProxy
                 sleepDurationPower: options.CurrentValue.SleepDurationPower, 
                 eachRetryTimeout: options.CurrentValue.EachRetryTimeout),
             ProviderPolicy.GetAdvancedCircuitBreakerPolicyAsync(
-                circuitBreaking: options.CurrentValue.CircuitBreaking, 
+                failurePercentage: options.CurrentValue.FailurePercentage,
+                samplingDuration: options.CurrentValue.SamplingDuration,
+                minumumSampling: options.CurrentValue.MinumumSampling,
                 durationOfBreak: options.CurrentValue.DurationOfBreak));
 
 		_service = service;
@@ -36,14 +38,4 @@ public class CalculatorProxy : ICalculatorProxy
 
     public Task<int> SubtractAsync(int intA, int intB)
         => _policyWrap.ExecuteAsync(() => _service.SubtractAsync(intA, intB));
-
-    /*
-    30seg
-    10req
-    70% - circuit open
-
-    duration - 5min
-
-    qtd - 6
-     */
 }

@@ -25,9 +25,10 @@ while (true)
     {
         for (int i = 0; i < 3; i++)
         {
-            Console.WriteLine($"Rodada {i + 1}");
-            Console.WriteLine("WCF Proxy result: " + string.Join(',', await Task.WhenAll(CreateThreads(wcfProxy, 6))));
-            Thread.Sleep(TimeSpan.FromSeconds(3));
+            Console.BackgroundColor = ConsoleColor.Blue;
+            Console.WriteLine($"Round {i + 1}");
+            Console.ResetColor();
+            Console.WriteLine("WCF Proxy result: " + string.Join(',', Task.WhenAll(CreateThreads(wcfProxy, 6))));
         }
     }
     else

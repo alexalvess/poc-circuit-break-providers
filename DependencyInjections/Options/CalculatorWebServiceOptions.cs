@@ -17,17 +17,5 @@ public record CalculatorWebServiceOptions
     public TimeSpan ReceiveTimeout { get; init; }
 
     [Required]
-    public int RetryCount { get; set; }
-
-    [Required]
-    public int SleepDurationPower { get; set; }
-
-    [Required]
-    public int EachRetryTimeout { get; set; }
-
-    [Required]
-    public int CircuitBreaking { get; set; }
-
-    [Required]
-    public TimeSpan DurationOfBreak { get; set; }
+    public RetryPolicyOptions RetryPolicyOptions { get; set; }
 }
