@@ -2,4 +2,5 @@
 
 public interface ICalculatorProxy : ICalculatorService
 {
+    Task<int> AddWithoutCircuitAsync(int intA, int intB);
 }

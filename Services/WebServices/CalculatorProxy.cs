@@ -20,6 +20,9 @@ public class CalculatorProxy : ICalculatorProxy
 		_service = service;
 	}
 
+    public Task<int> AddWithoutCircuitAsync(int intA, int intB)
+        => _service.AddAsync(intA, intB);
+
     public Task<int> AddAsync(int intA, int intB)
         => _policyWrap.ExecuteAsync(() => _service.AddAsync(intA, intB));
 

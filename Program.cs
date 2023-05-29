@@ -28,7 +28,7 @@ while (true)
             Console.BackgroundColor = ConsoleColor.Blue;
             Console.WriteLine($"Round {i + 1}");
             Console.ResetColor();
-            Console.WriteLine("WCF Proxy result: " + string.Join(',', Task.WhenAll(CreateThreads(wcfProxy, 6))));
+            Console.WriteLine("WCF Proxy result: " + string.Join(',', await Task.WhenAll(CreateThreads(wcfProxy, 6))));
         }
     }
     else
