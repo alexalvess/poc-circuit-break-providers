@@ -41,7 +41,7 @@ public static class ServiceCollectionExtensions
         });
 
         services.AddTransient<ICalculatorProxy, CalculatorProxy>();
-        services.AddSingleton<ControlPolicy>();
+        services.AddSingleton<WcfControlPolicy>();
 
         return services;
     }

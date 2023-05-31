@@ -9,9 +9,9 @@ namespace poc_circuit_break_providers.Services.WebServices;
 public class CalculatorProxy : ICalculatorProxy
 {
     private readonly ICalculatorService _service;
-	private readonly ControlPolicy _controlPolicy;
+	private readonly WcfControlPolicy _controlPolicy;
 
-	public CalculatorProxy(ICalculatorService service, ControlPolicy controlPolicy)
+	public CalculatorProxy(ICalculatorService service, WcfControlPolicy controlPolicy)
 	{
 		_service = service;
         _controlPolicy = controlPolicy;
