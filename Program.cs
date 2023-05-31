@@ -13,8 +13,6 @@ var serviceCollections = new ServiceCollection()
 
 var builder = serviceCollections.BuildServiceProvider();
 
-var wcfProxy = builder.GetRequiredService<ICalculatorProxy>();
-
 Console.WriteLine("Start Application");
 
 while (true)
@@ -28,18 +26,22 @@ while (true)
             Console.BackgroundColor = ConsoleColor.Blue;
             Console.WriteLine($"Round {i + 1}");
             Console.ResetColor();
-            Console.WriteLine("WCF Proxy result: " + string.Join(',', await Task.WhenAll(CreateThreads(wcfProxy, 6))));
+            Console.WriteLine("WCF Proxy result: " + string.Join(',', await Task.WhenAll(CreateThreads(6))));
         }
     }
     else
         break;
 }
 
-List<Task<int>> CreateThreads(ICalculatorProxy proxy, int numberOfThreads)
+List<Task<int>> CreateThreads(int numberOfThreads)
 {
+
     List<Task<int>> threads = new();
     for (int i = 0; i < numberOfThreads; i++)
+    {
+        var proxy = builder.GetRequiredService<ICalculatorProxy>();
         threads.Add(proxy.AddAsync(2, 2));
+    }
 
     return threads;
 }

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using poc_circuit_break_providers.DependencyInjections.Options;
+using poc_circuit_break_providers.Services;
 using poc_circuit_break_providers.Services.WebServices;
 using Polly;
 using System.ServiceModel;
@@ -18,7 +19,7 @@ public static class ServiceCollectionExtensions
             .AddOptions<CalculatorWebServiceOptions>()
             .Bind(configuration.GetSection(nameof(CalculatorWebServiceOptions)));
 
-        services.AddScoped(provider =>
+        services.AddTransient(provider =>
         {
             var options = provider.GetRequiredService<IOptionsMonitor<CalculatorWebServiceOptions>>().CurrentValue;
 
@@ -28,9 +29,9 @@ public static class ServiceCollectionExtensions
                 ReaderQuotas = System.Xml.XmlDictionaryReaderQuotas.Max,
                 MaxReceivedMessageSize = int.MaxValue,
                 AllowCookies = options.AllowCookies,
+                SendTimeout = options.SendTimeout,
+                ReceiveTimeout = options.ReceiveTimeout
             };
-            binding.SendTimeout = options.SendTimeout;
-            binding.ReceiveTimeout = options.ReceiveTimeout;
 
             EndpointAddress endpoint = new(options.Endpoint);
 
@@ -39,7 +40,8 @@ public static class ServiceCollectionExtensions
             return channel.CreateChannel();
         });
 
-        services.AddScoped<ICalculatorProxy, CalculatorProxy>();
+        services.AddTransient<ICalculatorProxy, CalculatorProxy>();
+        services.AddSingleton<ControlPolicy>();
 
         return services;
     }
