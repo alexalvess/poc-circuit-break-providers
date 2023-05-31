@@ -8,20 +8,6 @@ namespace poc_circuit_break_providers.Services;
 
 public static class ProviderPolicy
 {
-    public static ISyncPolicy GetRetryPolicy(RetryPolicyOptions options)
-        => Policy
-            .Handle<Exception>()
-            .WaitAndRetry(
-                retryCount: options.RetryCount,
-                sleepDurationProvider: retryAttempt => options.SleepDurationPower,
-                onRetry: (exception, timespan)
-                    => LogError($"Retrying in {timespan.TotalSeconds}s. Attempt: {options.RetryCount}. Message: {exception.Message}"))
-            .Wrap(
-                Policy.Timeout(
-                    seconds: options.EachRetryTimeout,
-                    timeoutStrategy: TimeoutStrategy.Optimistic,
-                    onTimeout: (_, timeout, _) => { LogError($"Timeout applied after {timeout}s"); }));
-
     public static IAsyncPolicy GetRetryPolicyAsync(RetryPolicyOptions options)
         => Policy
             .Handle<Exception>()
@@ -35,26 +21,6 @@ public static class ProviderPolicy
                     seconds: options.EachRetryTimeout,
                     timeoutStrategy: TimeoutStrategy.Optimistic,
                     onTimeoutAsync: async (_, timeout, _) => { await Task.Yield(); LogError($"Timeout applied after {timeout}s"); }));
-
-    public static ISyncPolicy GetCircuitBreakerPolicy(CircuitBreakerOptions options)
-        => Policy
-            .Handle<Exception>()
-            .CircuitBreaker(
-                exceptionsAllowedBeforeBreaking: options.CircuitBreaking,
-                durationOfBreak: options.DurationOfBreak,
-                onBreak: (_, state, breakingTime, _) => LogWarning($"Circuit breaking! State: {state}. Break time: {breakingTime.TotalSeconds}s"),
-                onReset: _ => LogWarning("Circuit resetting!"),
-                onHalfOpen: () => LogWarning($"Circuit transitioning to {CircuitState.HalfOpen}"));
-
-    public static IAsyncPolicy GetCircuitBreakerPolicyAsync(CircuitBreakerOptions options)
-        => Policy
-            .Handle<Exception>()
-            .CircuitBreakerAsync(
-                exceptionsAllowedBeforeBreaking: options.CircuitBreaking,
-                durationOfBreak: options.DurationOfBreak,
-                onBreak: (_, state, breakingTime, _) => LogWarning($"Circuit breaking! State: {state}. Break time: {breakingTime.TotalSeconds}s"),
-                onReset: _ => LogWarning("Circuit resetting!"),
-                onHalfOpen: () => LogWarning($"Circuit transitioning to {CircuitState.HalfOpen}"));
 
     public static IAsyncPolicy GetAdvancedCircuitBreakerPolicyAsync(CircuitBreakerOptions options)
         => Policy
