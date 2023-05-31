@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using poc_circuit_break_providers.DependencyInjections.Options;
 using poc_circuit_break_providers.Services;
+using poc_circuit_break_providers.Services.WebServices;
 using poc_circuit_break_providers.Services.WebServices.Proxies;
 using Polly;
 using System.ServiceModel;

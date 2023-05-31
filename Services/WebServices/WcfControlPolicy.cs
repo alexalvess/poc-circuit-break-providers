@@ -4,9 +4,9 @@ using Polly;
 
 namespace poc_circuit_break_providers.Services.WebServices;
 
-public class ControlPolicy
+public class WcfControlPolicy
 {
-    public ControlPolicy(IOptionsMonitor<CalculatorWebServiceOptions> options)
+    public WcfControlPolicy(IOptionsMonitor<CalculatorWebServiceOptions> options)
     {
         PolicyWrap = Policy.WrapAsync(
             WcfPolicy.GetRetryPolicyAsync(options.CurrentValue.RetryPolicyOptions),
