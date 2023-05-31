@@ -6,7 +6,7 @@ using poc_circuit_break_providers.DependencyInjections.Options;
 
 namespace poc_circuit_break_providers.Services;
 
-public static class ProviderPolicy
+public static class WcfPolicy
 {
     public static IAsyncPolicy GetRetryPolicyAsync(RetryPolicyOptions options)
         => Policy

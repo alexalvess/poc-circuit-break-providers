@@ -9,8 +9,8 @@ public class ControlPolicy
 	public ControlPolicy(IOptionsMonitor<CalculatorWebServiceOptions> options)
 	{
         PolicyWrap = Policy.WrapAsync(
-            ProviderPolicy.GetRetryPolicyAsync(options.CurrentValue.RetryPolicyOptions),
-            ProviderPolicy.GetAdvancedCircuitBreakerPolicyAsync(options.CurrentValue.CircuitBreakerOptions));
+            WcfPolicy.GetRetryPolicyAsync(options.CurrentValue.RetryPolicyOptions),
+            WcfPolicy.GetAdvancedCircuitBreakerPolicyAsync(options.CurrentValue.CircuitBreakerOptions));
     }
 
     public AsyncPolicy PolicyWrap { get; }
