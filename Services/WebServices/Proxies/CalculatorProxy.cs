@@ -4,18 +4,18 @@ using Polly;
 using Polly.Wrap;
 using System.ServiceModel;
 
-namespace poc_circuit_break_providers.Services.WebServices;
+namespace poc_circuit_break_providers.Services.WebServices.Proxies;
 
 public class CalculatorProxy : ICalculatorProxy
 {
     private readonly ICalculatorService _service;
-	private readonly WcfControlPolicy _controlPolicy;
+    private readonly WcfControlPolicy _controlPolicy;
 
-	public CalculatorProxy(ICalculatorService service, WcfControlPolicy controlPolicy)
-	{
-		_service = service;
+    public CalculatorProxy(ICalculatorService service, WcfControlPolicy controlPolicy)
+    {
+        _service = service;
         _controlPolicy = controlPolicy;
-	}
+    }
 
     public Task<int> AddWithoutCircuitAsync(int intA, int intB)
         => _service.AddAsync(intA, intB);

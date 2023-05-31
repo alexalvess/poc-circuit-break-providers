@@ -4,7 +4,7 @@ using Polly.CircuitBreaker;
 using System.Diagnostics;
 using poc_circuit_break_providers.DependencyInjections.Options;
 
-namespace poc_circuit_break_providers.Services;
+namespace poc_circuit_break_providers.Services.WebServices;
 
 public static class WcfPolicy
 {

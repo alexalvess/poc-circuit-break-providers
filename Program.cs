@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using poc_circuit_break_providers.DependencyInjections;
-using poc_circuit_break_providers.Services.WebServices;
+using poc_circuit_break_providers.Services.WebServices.Proxies;
 
 IConfigurationRoot configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)

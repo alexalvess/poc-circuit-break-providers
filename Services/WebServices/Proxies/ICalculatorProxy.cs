@@ -1,4 +1,4 @@
-﻿namespace poc_circuit_break_providers.Services.WebServices;
+﻿namespace poc_circuit_break_providers.Services.WebServices.Proxies;
 
 public interface ICalculatorProxy : ICalculatorService
 {
